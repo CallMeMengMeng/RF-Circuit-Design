@@ -1,0 +1,18 @@
+%  Solutions of <RF circuit design: Theory and Application>
+
+%  Problem 1.5
+
+close all;
+clc;
+
+f = 30e6:1000:3000e6;
+L = 10e-9;
+C = 10e-12;
+R = 5;
+
+z1 = 1./(1i*2*pi*f*C+1./(1i*2*pi*f*L));
+z2 = 1i*(2*pi*f*L-1./(2*pi*f*C));
+
+
+subplot(2,2,1); plot(f/1e6, abs(z1)); grid
+
