@@ -1,0 +1,31 @@
+%  Solutions of <RF circuit design: Theory and Application>
+
+%  Problem 1.9
+
+clc;
+close all;
+
+N = 10;
+f = 1e6:1e6:3*1e9;
+d = 0.40386*1e-3; %AWG26;
+l = 5*1e-3;
+r = 2.5*1e-3;
+mu0 = 4*pi*1e-7;
+Cu = 64.516*1e6; %conducitvity of copper;
+
+L = (mu0*N^2*pi*r^2)/2;
+Rdc = (2*pi*r*N)/(Cu*pi*(d/2)^2);
+Rs = Rdc*(d/4)*sqrt(pi*f*mu0*Cu);
+
+fprintf('Inductance L = %g microHenry and Rdc = %g milliOhm \n', L/1e-6, Rdc/1e-3);
+
+z1 = Rdc+1i*2*pi*f*L;
+z2 = Rdc+1i*(2*pi*f*L+Rs);
+
+subplot(2,1,1); plot(f/1e6, abs(z1)/1e3, 'b', f/1e6, abs(z2)/1e3, 'o'); grid on;
+title('Pure inductor and Inductor with skin effect (o)');
+xlabel('frequency, MHz'); ylabel('|z_1|, k\Omega');
+
+subplot(2,1,2); plot(f/1e6, abs(Rs)); grid on;
+title('Increase in reactance due to skin effect'); 
+xlabel('frequency, MHz'); ylabel('Rs, \Omega');
