@@ -1,0 +1,9 @@
+% The relationship between ASWR and |Gamma_l|
+
+clc;
+close all;
+
+Gamma = 0: 0.1: 1;
+ASWR = (1+Gamma)./(1-Gamma);
+
+plot(Gamma, ASWR); title('The relationship between |\Gamma| and ASWR
