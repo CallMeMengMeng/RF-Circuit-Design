@@ -1,0 +1,33 @@
+%  Solutions of <RF circuit design: Theory and Application>
+
+%  Example P5.9
+
+clc;
+close all;
+
+fc = 1e9;
+g0 = 1;
+g1 = 1/(2*pi*fc*0.7654);
+g2 = 1/(2*pi*fc*1.8478);
+g3 = 1/(2*pi*fc*1.8478);
+g4 = 1/(2*pi*fc*0.7654);
+g5 = 1;
+f = 0.0;
+
+for i = 1:300
+    omega = 2*pi*f;
+    A0 = [1 g0; 0 1];
+    A1 = [1 0; 1./(1i*omega*g1) 1];
+    A2 = [1 1./(1i*omega*g2); 0 1];
+    A3 = [1 0; 1./(1i*omega*g3) 1];
+    A4 = [1 1./(1i*omega*g4); 0 1];
+    A5 = [1 0; g5 1];
+    A = A0*A1*A2*A3*A4*A5;
+    H(i) = 2./(A(1));
+    freq(i) = f;
+    f = f+0.01*fc;
+end
+
+fig = figure;
+plot(freq/1e9, -20*log10(abs(H))); grid on; axis([0 3 0 35]);
+title('Fourth order
