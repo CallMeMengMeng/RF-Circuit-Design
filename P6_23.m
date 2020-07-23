@@ -1,0 +1,51 @@
+%  Solutions of <RF circuit design: Theory and Application>
+
+%  Example P5.14
+
+clc;
+close all;
+
+fig = figure;
+
+WL = 10;
+mu_n = 0.135;
+d = 2*1e-6;
+epsilon_r = 11.7;
+Vt0 = -3;
+Vgs = -1;
+Nd = 1.3*1e15*1e6;
+lambda = 0.01;
+
+q = 1.60218*1e-19;
+epsilon_0 = 8.85*1e-12;
+epsilon = epsilon_r*epsilon_0;
+
+Vp = q*Nd*d^2/2/epsilon;
+Vd = Vt0+Vp;
+
+G0 = q^2*mu_n*Nd^2*WL*d;
+Idss = G0*(Vp/3-Vd+2/3/sqrt(Vp)*Vd^(3/2));
+
+Vds = 0:0.01:5;
+Vds_sat = Vgs-Vt0;
+
+Id_sat = G0*(Vp/3-(Vd-Vgs)+2/(3*sqrt(Vp))*(Vd-Vgs)^(3/2));
+Id_linear = G0*(Vds-2/(3*sqrt(Vp)).*((Vds+Vd-Vgs).^(3/2)-(Vd-Vgs)^(3/2))).*(1+lambda*Vds);
+Id_saturation = Id_sat*(1+lambda*Vds);
+Id = Id_linear.*(Vds<=Vds_sat)+Id_saturation.*(Vds>Vds_sat);
+
+plot(Vds, Id/1e-3, 'b:'); hold on; grid on;
+
+Id_linear2 = G0*(Vds-2/(3*sqrt(Vp)).*((Vds+Vd-Vgs).^(3/2)-(Vd-Vgs)^(3/2)));
+Id_saturation2 = Id_sat;
+Id2 = Id_linear2.*(Vds<=Vds_sat)+Id_saturation2.*(Vds>Vds_sat);
+
+plot(Vds, Id2/1e-3, 'r');
+
+title('Predict I_D for zero (solid line) as well as nonzero \lambda (dotted line)');
+xlabel('Drain-source voltage V_{DS}, V'); ylabel('Drain current I_D, mA');
+legend('with channel modulation','without channel modulation', 'Location','southeast');
+
+frame = getframe(fig);
+img = frame2im(frame);
+imwrite(img, 'P6_23.png');
